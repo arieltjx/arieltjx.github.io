@@ -22,14 +22,14 @@ float fbm(vec2 p){float v=0.,a=.5;for(int i=0;i<6;i++){v+=a*noise(p);p=mat2(.8,-
 void main(){
   vec2 st=gl_FragCoord.xy/resolution;
   float screenAspect=resolution.x/resolution.y;
-  vec2 p=(st-.5)*vec2(screenAspect,1.)*(scale*.35);
+  vec2 p=(st-.5)*vec2(screenAspect,1.)*(scale*.22);
   vec2 travel=direction*time;
   vec2 q=vec2(fbm(p+travel),fbm(p+vec2(5.2,1.3)+travel*.8));
   vec2 r=vec2(fbm(p+2.5*q+vec2(1.7,9.2)+travel*.55),fbm(p+2.5*q+vec2(8.3,2.8)+travel*.5));
   vec2 displacement=(r-.5)*2.*distortion;
   vec2 away=(st-pointer)*vec2(screenAspect,1.);
   float distanceToPointer=length(away);
-  float ripple=sin(distanceToPointer*28.-time*7.)*exp(-distanceToPointer*5.)*pointerStrength;
+  float ripple=sin(distanceToPointer*20.-time*7.)*exp(-distanceToPointer*4.)*pointerStrength;
   displacement+=normalize(away+vec2(.0001))*ripple*.025;
   float imageAspect=imageSize.x/imageSize.y;
   vec2 crop=vec2(min(1.,screenAspect/imageAspect),min(1.,imageAspect/screenAspect));
