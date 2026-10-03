@@ -10,15 +10,35 @@ const nextPage = document.getElementById('next-page');
 const stage = document.getElementById('book-stage');
 const zoomButton = document.getElementById('notebook-zoom');
 const pageError = document.getElementById('page-error');
-document.getElementById('book-title').textContent = book.title;
-document.title = `${book.title} | Hansheng Tian`;
+
 document.querySelector(`[data-book="${bookKey}"]`).setAttribute('aria-current','page');
-document.getElementById('page-total').textContent = `of ${book.pages}`;
+
 for(let i=1;i<=book.pages;i++){ const option=document.createElement('option');option.value=i;option.textContent=i;pageSelect.append(option); }
 const imagePath = n => `assets/notebooks/${bookKey}/${String(n).padStart(3,'0')}.webp`;
+function notebookTitle() {
+ return window.SiteI18n.language === 'zh' ? `${bookKey.replace('-', '–')} 工程笔记` : book.title;
+}
+function notebookCaption() {
+ return window.SiteI18n.language === 'zh' ? `${notebookTitle()} · 第 ${currentPage} 页，共 ${book.pages} 页` : `${book.title} · Page ${currentPage} of ${book.pages}`;
+}
+function updateNotebookLanguage() {
+ document.getElementById('book-title').textContent = notebookTitle();
+ document.title = `${notebookTitle()} | ${window.SiteI18n.language === 'zh' ? '田翰声' : 'Hansheng Tian'}`;
+ document.getElementById('page-total').textContent = window.SiteI18n.language === 'zh' ? ` / 共 ${book.pages} 页` : `of ${book.pages}`;
+ const caption = notebookCaption();
+ pageImage.alt = caption;
+ zoomButton.dataset.caption = caption;
+ document.getElementById('page-status').textContent = caption;
+ if (document.getElementById('photo-dialog').open) {
+  document.getElementById('photo-caption').textContent = caption;
+  document.getElementById('large-photo').alt = caption;
+ }
+}
+document.addEventListener('languagechange', updateNotebookLanguage);
+updateNotebookLanguage();
 function showPage(number,direction=''){
  currentPage=Math.max(1,Math.min(book.pages,number));
- const caption=`${book.title} · Page ${currentPage} of ${book.pages}`;
+ const caption = notebookCaption();
  stage.classList.remove('turn-next','turn-previous');stage.setAttribute('aria-busy','true');pageError.hidden=true;
  pageImage.alt=caption;pageImage.src=imagePath(currentPage);
  zoomButton.dataset.image=pageImage.src;zoomButton.dataset.caption=caption;

@@ -37,3 +37,10 @@ dialog.addEventListener('close', () => {
   document.body.classList.remove('modal-open');
   lastPhotoButton?.focus();
 });
+
+document.addEventListener('languagechange', () => {
+ if (dialog.open && lastPhotoButton) {
+  caption.textContent = lastPhotoButton.dataset.caption;
+  largePhoto.alt = lastPhotoButton.querySelector('img')?.alt || lastPhotoButton.dataset.caption;
+ }
+});
