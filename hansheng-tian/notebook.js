@@ -15,7 +15,7 @@ document.title = `${book.title} | Hansheng Tian`;
 document.querySelector(`[data-book="${bookKey}"]`).setAttribute('aria-current','page');
 document.getElementById('page-total').textContent = `of ${book.pages}`;
 for(let i=1;i<=book.pages;i++){ const option=document.createElement('option');option.value=i;option.textContent=i;pageSelect.append(option); }
-const imagePath = n => `https://hansheng-tian.kg5sffbhcb.chatgpt.site/assets/notebooks/${bookKey}/${String(n).padStart(3,'0')}.webp`;
+const imagePath = n => `assets/notebooks/${bookKey}/${String(n).padStart(3,'0')}.webp`;
 function showPage(number,direction=''){
  currentPage=Math.max(1,Math.min(book.pages,number));
  const caption=`${book.title} · Page ${currentPage} of ${book.pages}`;
